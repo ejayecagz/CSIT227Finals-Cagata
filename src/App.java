@@ -312,6 +312,107 @@ public class App extends JFrame {
             }
         });
     }
+rbCustomer.addChangeListener(new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (rbCustomer.isSelected()) {
+                tfMonths.setEnabled(!rbCustomer.isSelected());
+                tfSalary.setEnabled(!rbCustomer.isSelected());
+            } else {
+                tfMonths.setEnabled(true);
+                tfSalary.setEnabled(true);
+            }
+        }
+    });
+
+        btnReward.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                int index = Integer.parseInt(tfLoad.getText()) - 1;
+                if (index >= 0 && index < persons.size()) {
+                    giveReward(index);
+                } else {
+                    throw new IndexOutOfBoundsException("The index is out of bounds.");
+                }
+            } catch (NumberFormatException ex) {
+                tfLoad.setText("");
+                JOptionPane.showMessageDialog(btnReward, "The index is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IndexOutOfBoundsException ex) {
+                tfLoad.setText("");
+                JOptionPane.showMessageDialog(btnReward, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+        }
+    });
+        btnSavePerson.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                FileWriter fw = new FileWriter("persons.txt");
+                BufferedWriter bw = new BufferedWriter(fw);
+                for (Person person : persons) {
+                    bw.write(person.getName() + "," + person.getAge() + ",");
+                    if (person instanceof Employee) {
+                        Employee employee = (Employee) person;
+                        bw.write(employee.getMonths_worked() + "," + employee.getSalary() + ",");
+                        if (person instanceof Clerk) {
+                            bw.write("Clerk");
+                        } else if (person instanceof Manager) {
+                            bw.write("Manager");
+                        }
+                    } else if (person instanceof Customer) {
+                        bw.write("Customer");
+                    }
+                    bw.newLine();
+                }
+                bw.close();
+                JOptionPane.showMessageDialog(btnSavePerson, "Persons saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(btnSavePerson, "Error saving persons.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    });
+        btnLoadPerson.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                FileReader fr = new FileReader("persons.txt");
+                BufferedReader br = new BufferedReader(fr);
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] values = line.split(",");
+
+                    Person person;
+                    if (values[values.length - 1].equals("Customer")) {
+                        person = new Customer(values[0], Integer.parseInt(values[1]));
+                    } else if (values[values.length - 1].equals("Clerk")) {
+                        person = new Clerk(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]), Double.parseDouble(values[3]));
+                    } else if (values[values.length - 1].equals("Manager")) {
+                        person = new Manager(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]), Double.parseDouble(values[3]));
+                    } else {
+                        throw new Exception("Invalid person type");
+                    }
+
+                    persons.add(person);
+                    taPersons.append(persons.size() + ". " + person.getClass().getSimpleName() + " - " + person.getName() + " (" + person.getAge() + ")\n");
+                }
+
+                br.close();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(btnLoadPerson, "Error reading file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    });
+        btnSayHi.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (Person person : persons) {
+                System.out.println(person.toString());
+            }
+        }
+    });
 
 
     public static void main(String[] args) {
