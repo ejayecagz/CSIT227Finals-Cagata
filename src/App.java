@@ -47,6 +47,53 @@ public class App extends JFrame {
                 int work = 0;
                 double salary = 0.0;
                 Person person = null;
+
+                if (name.isEmpty()) {
+                    JOptionPane.showMessageDialog(btnSave, "Name cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    age = Integer.parseInt(tfAge.getText());
+
+                    if (age <= 0) {
+                        throw new NumberFormatException("Invalid age.");
+                    }
+
+                } catch (NumberFormatException exc) {
+                    JOptionPane.showMessageDialog(btnSave, exc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    tfAge.setText("");
+                    return;
+                }
+
+                if (rbClerk.isSelected() || rbManager.isSelected()) {
+                    try {
+                        work = Integer.parseInt(tfMonths.getText());
+
+                        if (work <= 0) {
+                            throw new NumberFormatException("Invalid number of months worked.");
+                        }
+
+                    } catch (NumberFormatException exc) {
+                        JOptionPane.showMessageDialog(btnSave, exc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        tfMonths.setText("");
+                        return;
+                    }
+
+                    try {
+                        salary = Double.parseDouble(tfSalary.getText());
+
+                        if (salary <= 0) {
+                            throw new NumberFormatException("Invalid amount of salary.");
+                        }
+
+                    } catch (NumberFormatException exc) {
+                        JOptionPane.showMessageDialog(btnSave, exc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        tfSalary.setText("");
+                        return;
+                    }
+                }
+
             }
         });
     }
