@@ -28,6 +28,12 @@ public class App extends JFrame {
     public App() {
         persons = new ArrayList<>();
         // TODO add implementations for all milestones here
+
+        ButtonGroup br = new ButtonGroup ();
+        br.add(rbCustomer);
+        br.add(rbClerk);
+        br.add(rbManager);
+
         btnClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,7 +54,13 @@ public class App extends JFrame {
         app.setVisible(true);
     }
 
-    static void giveReward(int n) {
+    void giveReward(int n) {
+        Person person = persons.get(n);
+        if (person instanceof Employee) {
+            Employee employee = (Employee) person;
+            double thirteenthMonth = employee.getThirteenthMonth();
+            JOptionPane.showMessageDialog(App.this, "The thirteenth month of " + employee.getName() + " is " + thirteenthMonth, "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
 
     }
 }
