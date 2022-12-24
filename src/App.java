@@ -473,7 +473,40 @@ btnSavePerson.addActionListener(new ActionListener() {
             }
         }
     });
+ btnLoadPerson.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                FileReader fr = new FileReader("persons.txt");
+                BufferedReader br = new BufferedReader(fr);
 
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] values = line.split(",");
+
+                    Person person;
+                    if (values[values.length - 1].equals("Customer")) {
+                        person = new Customer(values[0], Integer.parseInt(values[1]));
+                    } else if (values[values.length - 1].equals("Clerk")) {
+                        person = new Clerk(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]),Double.parseDouble(values[3]));
+                    } else if (values[values.length - 1].equals("Manager")) {
+                        person = new Manager(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]), Double.parseDouble(values[3]));
+                    } else {
+                        throw new Exception("Invalid person type");
+                    }
+
+                    persons.add(person);
+                    taPersons.append(persons.size() + ". " + person.getClass().getSimpleName() + " - " + person.getName() + " (" + person.getAge() + ")\n");
+                }
+
+                br.close();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(btnLoadPerson, "Error reading file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    });
+
+}
 
 
     public static void main(String[] args) {
