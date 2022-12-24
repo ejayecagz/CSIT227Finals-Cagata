@@ -41,6 +41,12 @@ public class App extends JFrame {
                 tfAge.setText(null);
                 tfMonths.setText(null);
                 tfSalary.setText(null);
+
+                String name = tfName.getText();
+                int age = 0;
+                int work = 0;
+                double salary = 0.0;
+                Person person = null;
             }
         });
     }
