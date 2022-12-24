@@ -1,6 +1,9 @@
 import javax.swing.*;
+import java.swing.event.ChangeEvent;
+import java.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io*
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +31,6 @@ public class App extends JFrame {
     public App() {
         persons = new ArrayList<>();
         // TODO add implementations for all milestones here
-
         ButtonGroup br = new ButtonGroup();
         br.add(rbCustomer);
         br.add(rbClerk);
@@ -109,21 +111,6 @@ public class App extends JFrame {
             }
         });
 
-        // to make the text area uneditable
-        taPersons.setEditable(false);
-
-        btnClear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Clear input fields
-                tfName.setText("");
-                tfAge.setText("");
-                tfMonths.setText("");
-                tfSalary.setText("");
-                tfLoad.setText("");
-            }
-        });
-
         btnLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,7 +144,6 @@ public class App extends JFrame {
         btnSayHi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // loop for the message
                 for (Person person : persons) {
                     System.out.println(person.toString());
                 }
