@@ -29,7 +29,7 @@ public class App extends JFrame {
         persons = new ArrayList<>();
         // TODO add implementations for all milestones here
 
-        ButtonGroup br = new ButtonGroup ();
+        ButtonGroup br = new ButtonGroup();
         br.add(rbCustomer);
         br.add(rbClerk);
         br.add(rbManager);
@@ -240,7 +240,7 @@ public class App extends JFrame {
                         if (values[values.length - 1].equals("Customer")) {
                             person = new Customer(values[0], Integer.parseInt(values[1]));
                         } else if (values[values.length - 1].equals("Clerk")) {
-                            person = new Clerk(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]),Double.parseDouble(values[3]));
+                            person = new Clerk(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]), Double.parseDouble(values[3]));
                         } else if (values[values.length - 1].equals("Manager")) {
                             person = new Manager(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]), Double.parseDouble(values[3]));
                         } else {
@@ -282,9 +282,37 @@ public class App extends JFrame {
                 tfLoad.setText("");
             }
         });
+        btnLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int i = Integer.parseInt(tfLoad.getText()) - 1;
+                    Person person = persons.get(i);
 
+                    tfName.setText(person.getName());
+                    tfAge.setText(Integer.toString(person.getAge()));
 
+                    if (person instanceof Customer) {
+                        rbCustomer.setSelected(true);
+                    } else if (person instanceof Employee) {
+                        Employee employee = (Employee) person;
+                        if (person instanceof Clerk) {
+                            rbClerk.setSelected(true);
+                        } else if (person instanceof Manager) {
+                            rbManager.setSelected(true);
+                        }
+                        tfMonths.setText(Integer.toString(employee.getMonths_worked()));
+                        tfSalary.setText(Double.toString(employee.getSalary()));
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(btnLoad, "You must choose a number from the list.");
+                } catch (IndexOutOfBoundsException ex) {
+                    JOptionPane.showMessageDialog(btnLoad, "You must input a number starting from 1.");
+                }
+            }
+        });
     }
+
 
     public static void main(String[] args) {
         // add here how to make GUI visible
