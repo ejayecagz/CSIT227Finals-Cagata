@@ -413,6 +413,67 @@ rbCustomer.addChangeListener(new ChangeListener() {
             }
         }
     });
+    rbCustomer.addChangeListener(new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (rbCustomer.isSelected()) {
+                tfMonths.setEnabled(!rbCustomer.isSelected());
+                tfSalary.setEnabled(!rbCustomer.isSelected());
+            } else {
+                tfMonths.setEnabled(true);
+                tfSalary.setEnabled(true);
+            }
+        }
+    });
+        btnReward.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                int index = Integer.parseInt(tfLoad.getText()) - 1;
+                if (index >= 0 && index < persons.size()) {
+                    giveReward(index);
+                } else {
+                    throw new IndexOutOfBoundsException("The index is out of bounds.");
+                }
+            } catch (NumberFormatException ex) {
+                tfLoad.setText("");
+                JOptionPane.showMessageDialog(btnReward, "The index is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IndexOutOfBoundsException ex) {
+                tfLoad.setText("");
+                JOptionPane.showMessageDialog(btnReward, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+        }
+    });
+btnSavePerson.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                FileWriter fw = new FileWriter("persons.txt");
+                BufferedWriter bw = new BufferedWriter(fw);
+                for (Person person : persons) {
+                    bw.write(person.getName() + "," + person.getAge() + ",");
+                    if (person instanceof Employee) {
+                        Employee employee = (Employee) person;
+                        bw.write(employee.getMonths_worked() + "," + employee.getSalary() + ",");
+                        if (person instanceof Clerk) {
+                            bw.write("Clerk");
+                        } else if (person instanceof Manager) {
+                            bw.write("Manager");
+                        }
+                    } else if (person instanceof Customer) {
+                        bw.write("Customer");
+                    }
+                    bw.newLine();
+                }
+                bw.close();
+                JOptionPane.showMessageDialog(btnSavePerson, "Persons saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(btnSavePerson, "Error saving persons.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    });
+
 
 
     public static void main(String[] args) {
